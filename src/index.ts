@@ -11,7 +11,7 @@ const app = new Hono<{ Variables: TAuthVariables }>().basePath('/api/design')
 .use('/api/*', cors())
 .use(secureHeaders())
 .use(logger())
-// .use('*', authMiddleware)
+.use('*', authMiddleware)
 .post('/', async (c) => {
     return c.text("hello world from design", 200)
 })
