@@ -129,7 +129,7 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
       const designId = c.req.valid('param').id
       const design = await DesignService.getDesignById(designId);
 
-      // if there's no design, create new one
+      // check if there's existing design
       if (!design || !design.id) {
         return c.json(
           {
@@ -138,8 +138,6 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
           404
         );
       }
-
-      // else if there's existing design
 
       // check user authenticity
       if (design.userId != userId) {
