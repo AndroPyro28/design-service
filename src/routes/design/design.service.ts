@@ -1,0 +1,59 @@
+import prisma from "../../libs/prisma"
+import { TCreateDesign, TUpdateDesign } from "../../schema/design";
+
+
+class DesignService {
+
+  constructor() {}
+
+  public static createDesign = async ({userId, data}:{userId:string;data:TCreateDesign}) => {
+    const design = await prisma.design.create({
+      data: {
+        name: 'asd',
+        canvasData: 'asd',
+        height:1,
+        userId:'asd',
+        width:1,
+        category:'Logo'
+      }
+    })
+  }
+
+  public static getDesignsByUserId = async (userId:string) => {
+    const designs = await prisma.design.findMany({
+      where: {
+        userId
+      },
+      orderBy: {
+        updatedAt: 'desc'
+      }
+    })
+
+    return designs
+  }
+
+  public static getDesignById = async (designId:string) => {
+    const design = await prisma.design.findUnique({
+      where: {
+        id: designId
+      },
+    })
+
+    return design
+  }
+  
+  public static updateDesign = async (designId: string, data: TUpdateDesign) => {
+    const design = await prisma.design.update({
+      where: {
+        id: designId
+      },
+      data: {
+        ...data
+      },
+    })
+    return design
+  }
+ 
+}
+
+export default DesignService

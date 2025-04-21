@@ -14,7 +14,7 @@ export const authMiddleware = createMiddleware(async (c, next) => {
 });
 
 export type TAuthVariables = {
-  user: {
-    userId: string
-  }
+    user: {
+      userId: string
+    }
 };

@@ -14,7 +14,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum category {
+  Logo
+  Photo
+}
+
 model User {
   id   String @id @default(cuid())
   name String
+}
+
+model Design {
+  id         String   @id @default(cuid())
+  userId     String
+  name       String
+  canvasData String
+  width      Int
+  height     Int
+  category   category @default(Photo)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

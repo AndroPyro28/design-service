@@ -122,6 +122,18 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.DesignScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  canvasData: 'canvasData',
+  width: 'width',
+  height: 'height',
+  category: 'category',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -132,9 +144,20 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.DesignOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  canvasData: 'canvasData'
+};
+exports.category = exports.$Enums.category = {
+  Logo: 'Logo',
+  Photo: 'Photo'
+};
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Design: 'Design'
 };
 
 /**

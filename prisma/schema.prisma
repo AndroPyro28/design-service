@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,7 +14,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+enum category {
+  Logo
+  Photo
+}
+
+model Design {
   id String @id @default(cuid())
+  userId String 
   name String
+  canvasData String
+  width Int
+  height Int
+  category category @default(Photo)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([userId])
 }
