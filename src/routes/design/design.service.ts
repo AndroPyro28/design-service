@@ -53,6 +53,16 @@ class DesignService {
     })
     return design
   }
+
+  public static deleteDesign = async (designId:string) => {
+    const design = await prisma.design.delete({
+      where: {
+        id: designId
+      },
+    })
+    return design
+  }
+
  
 }
 

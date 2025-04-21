@@ -153,9 +153,9 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
 
       // perform deletion
 
-      // const updatedDesign = await DesignService.updateDesign(design.id, body);
+      const updatedDesign = await DesignService.deleteDesign(design.id);
 
-      return c.json({  }, 200);
+      return c.json({ data: updatedDesign }, 200);
     } catch (error) {
       return c.json(
         {
