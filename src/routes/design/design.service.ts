@@ -1,12 +1,12 @@
 import prisma from "../../libs/prisma"
-import { TCreateDesign, TUpdateDesign } from "../../schema/design";
+import { TCreateDesignSchema, TUpdateDesignSchema } from "../../schema/design"
 
 
 class DesignService {
 
   constructor() {}
 
-  public static createDesign = async ({userId, data}:{userId:string;data:TCreateDesign}) => {
+  public static createDesign = async (userId:string, data:TCreateDesignSchema) => {
     const design = await prisma.design.create({
       data: {
         name: 'asd',
@@ -42,7 +42,7 @@ class DesignService {
     return design
   }
   
-  public static updateDesign = async (designId: string, data: TUpdateDesign) => {
+  public static updateDesign = async (designId: string, data: TUpdateDesignSchema) => {
     const design = await prisma.design.update({
       where: {
         id: designId
