@@ -5,18 +5,19 @@ import {
   TAuthVariables,
 } from "../../middlewares/auth.middleware";
 import DesignService from "./design.service";
-import { CreateDesignSchema, DeleteDesignSchema, ParamsDesignSchema, UpdateDesignSchema } from "../../schema/design";
+import { CreateDesignSchema, CreateOrUpdateDesignSchema, DeleteDesignSchema, ParamsDesignSchema } from "../../schema/design";
+import { roleMiddleware } from "../../middlewares/role.middleware"; // for role based auth
+    
+// protected by auth middleware
 
 const designControllers = new Hono<{ Variables: TAuthVariables }>()
 
-  .post("/", zValidator("json", CreateDesignSchema), async (c) => {
+  .post("/", zValidator('json', CreateDesignSchema), async (c) => {
     const body = c.req.valid("json");
     const { userId } = c.get("user");
     try {
       const data = await DesignService.createDesign(userId, body);
-
-      return c.json({ data }, 201);
-
+      return c.json({data}, 201)
     } catch (error) {
       return c.json(
         {
@@ -27,9 +28,10 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
     }
   })
 
-  .get("/", async (c) => {
+  .get("/", 
+    // roleMiddleware(['ADMIN', 'STUDENT']),
+  async (c) => {
     try {
-      // validated by middleware
       const { userId } = c.get("user");
       const designs = await DesignService.getDesignsByUserId(userId);
 
@@ -79,22 +81,26 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
     }
   })
 
-  .put("/:id", zValidator('param', ParamsDesignSchema), zValidator("json", UpdateDesignSchema), async (c) => {
+  .put("/", zValidator("json", CreateOrUpdateDesignSchema), async (c) => {
     try {
       const { userId } = c.get("user");
-      const designId = c.req.valid('param').id
       const body = c.req.valid("json");
 
-      const design = await DesignService.getDesignById(designId);
+      if(!body?.id) {
+        const newDesign = await DesignService.createDesign(userId, body)
+        return c.json({ data: newDesign }, 201);
+      }
 
-      // if there's no design, create new one
+      const { id } = body;
+
+      const design = await DesignService.getDesignById(id);
+      
       if (!design || !design.id) {
-        const design = await DesignService.createDesign(userId, body);
         return c.json(
           {
-            data: design,
+            message: "Design Not Found",
           },
-          201
+          404
         );
       }
 
@@ -113,6 +119,7 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
       const updatedDesign = await DesignService.updateDesign(design.id, body);
 
       return c.json({ data: updatedDesign }, 200);
+
     } catch (error) {
       return c.json(
         {

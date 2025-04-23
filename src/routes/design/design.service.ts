@@ -1,22 +1,20 @@
 import prisma from "../../libs/prisma"
-import { TCreateDesignSchema, TUpdateDesignSchema } from "../../schema/design"
+import { TCreateDesignSchema, TCreateOrUpdateDesignSchema, TUpdateDesignSchema } from "../../schema/design"
 
 
 class DesignService {
 
   constructor() {}
 
-  public static createDesign = async (userId:string, data:TCreateDesignSchema) => {
+  public static createDesign = async (userId:string, data:(TCreateDesignSchema | TCreateOrUpdateDesignSchema)) => {
     const design = await prisma.design.create({
       data: {
-        name: 'asd',
-        canvasData: 'asd',
-        height:1,
-        userId:'asd',
-        width:1,
-        category:'Logo'
+        ...data,
+        userId,
       }
     })
+
+    return design
   }
 
   public static getDesignsByUserId = async (userId:string) => {
@@ -38,7 +36,6 @@ class DesignService {
         id: designId
       },
     })
-
     return design
   }
   
@@ -62,8 +59,6 @@ class DesignService {
     })
     return design
   }
-
- 
 }
 
 export default DesignService

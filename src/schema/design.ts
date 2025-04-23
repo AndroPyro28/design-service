@@ -22,7 +22,11 @@ export const CreateDesignSchema = DesignSchema.pick({
     width: true,
     height: true,
     category: true,
+}).extend({
+    width: z.coerce.number(),
+    height: z.coerce.number(),
 })
+
 export const ParamsDesignSchema = DesignSchema.pick({
     id:true
 })
@@ -36,11 +40,29 @@ export const UpdateDesignSchema = CreateDesignSchema.pick({
     height: true,
     category: true,
     userId:true
+}).extend({
+    width: z.coerce.number(),
+    height: z.coerce.number(),
 })
 
 export type TUpdateDesignSchema = z.infer<typeof UpdateDesignSchema>
 
+export const CreateOrUpdateDesignSchema = DesignSchema.pick({
+    id: true,
+    name: true,
+    canvasData: true,
+    width: true,
+    height: true,
+    category: true,
+    userId:true
+}).extend({
+    width: z.coerce.number(),
+    height: z.coerce.number(),
+})
+
+export type TCreateOrUpdateDesignSchema = z.infer<typeof CreateOrUpdateDesignSchema>
+
+
 export const DeleteDesignSchema = DesignSchema.pick({
     id:true
 })
-
