@@ -12,30 +12,30 @@ import { roleMiddleware } from "../../middlewares/role.middleware"; // for role 
 
 const designControllers = new Hono<{ Variables: TAuthVariables }>()
 
-  .post("/", zValidator('json', CreateDesignSchema), async (c) => {
-    const body = c.req.valid("json");
-    const { userId } = c.get("user");
-    try {
-      const data = await DesignService.createDesign(userId, body);
-      return c.json({data}, 201)
-    } catch (error) {
-      return c.json(
-        {
-          message: "Something went wrong",
-        },
-        500
-      );
-    }
-  })
+  // .post("/", zValidator('json', CreateDesignSchema), async (c) => {
+  //   const body = c.req.valid("json");
+  //   const { userId } = c.get("user");
+  //   try {
+  //     const data = await DesignService.createDesign(userId, body);
+  //     return c.json({data}, 201)
+  //   } catch (error) {
+  //     return c.json(
+  //       {
+  //         message: "Something went wrong",
+  //       },
+  //       500
+  //     );
+  //   }
+  // })
 
   .get("/", 
     // roleMiddleware(['ADMIN', 'STUDENT']),
   async (c) => {
     try {
       const { userId } = c.get("user");
+      console.log('userId', userId)
       const designs = await DesignService.getDesignsByUserId(userId);
-
-      return c.json({ data:designs }, 200);
+      return c.json(designs, 200);
 
     } catch (error) {
       return c.json(
@@ -70,7 +70,7 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
         );
       }
 
-      return c.json({ data:design }, 200);
+      return c.json(design, 200);
     } catch (error) {
       return c.json(
         {
@@ -81,14 +81,15 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
     }
   })
 
-  .put("/", zValidator("json", CreateOrUpdateDesignSchema), async (c) => {
+  .post("/", zValidator("json", CreateOrUpdateDesignSchema), async (c) => {
     try {
       const { userId } = c.get("user");
       const body = c.req.valid("json");
 
+      // if there's no ID then create new design
       if(!body?.id) {
         const newDesign = await DesignService.createDesign(userId, body)
-        return c.json({ data: newDesign }, 201);
+        return c.json(newDesign, 201);
       }
 
       const { id } = body;
@@ -118,7 +119,7 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
 
       const updatedDesign = await DesignService.updateDesign(design.id, body);
 
-      return c.json({ data: updatedDesign }, 200);
+      return c.json(updatedDesign, 200);
 
     } catch (error) {
       return c.json(
@@ -158,9 +159,9 @@ const designControllers = new Hono<{ Variables: TAuthVariables }>()
 
       // perform deletion
 
-      const updatedDesign = await DesignService.deleteDesign(design.id);
+      const deletedDesign = await DesignService.deleteDesign(design.id);
 
-      return c.json({ data: updatedDesign }, 200);
+      return c.json(deletedDesign, 200);
     } catch (error) {
       return c.json(
         {

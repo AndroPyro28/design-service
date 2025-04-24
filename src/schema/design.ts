@@ -39,7 +39,6 @@ export const UpdateDesignSchema = CreateDesignSchema.pick({
     width: true,
     height: true,
     category: true,
-    userId:true
 }).extend({
     width: z.coerce.number(),
     height: z.coerce.number(),
@@ -54,10 +53,12 @@ export const CreateOrUpdateDesignSchema = DesignSchema.pick({
     width: true,
     height: true,
     category: true,
-    userId:true
 }).extend({
     width: z.coerce.number(),
     height: z.coerce.number(),
+})
+.partial({
+    id:true
 })
 
 export type TCreateOrUpdateDesignSchema = z.infer<typeof CreateOrUpdateDesignSchema>

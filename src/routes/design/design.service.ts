@@ -39,7 +39,7 @@ class DesignService {
     return design
   }
   
-  public static updateDesign = async (designId: string, data: TUpdateDesignSchema) => {
+  public static updateDesign = async (designId: string, data: TCreateOrUpdateDesignSchema) => {
     const design = await prisma.design.update({
       where: {
         id: designId

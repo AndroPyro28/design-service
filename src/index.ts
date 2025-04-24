@@ -9,7 +9,13 @@ import { authMiddleware } from './middlewares/auth.middleware'
 import designControllers from './routes/design/design.controller'
 
 const app = new Hono().basePath('/api')
-.use('/api/*', cors())
+.use('/api/*', cors(
+    {
+        origin: "*",
+        allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allowHeaders: ['Content-Type', 'Authorization'],
+    }
+))
 .use(secureHeaders())
 .use(logger())
 .use('*', authMiddleware)

@@ -15,8 +15,9 @@ datasource db {
 }
 
 enum category {
-  Logo
-  Photo
+  LOGO
+  PHOTO
+  YOUTUBE_THUMBNAIL
 }
 
 model Design {
@@ -26,7 +27,7 @@ model Design {
   canvasData String
   width Int
   height Int
-  category category @default(Photo)
+  category category @default(YOUTUBE_THUMBNAIL)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@index([userId])
